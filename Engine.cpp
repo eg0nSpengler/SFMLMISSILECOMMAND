@@ -9,32 +9,16 @@ Engine::Engine(int screenWidth, int screenHeight) : window(sf::VideoMode(screenW
 	ground.setPosition(sf::Vector2f(0.0f, screenHeight));
 	ground.setFillColor(sf::Color::Yellow);
 	ground.setOutlineColor(sf::Color::Black);
-	b1.rect.setPosition(sf::Vector2f(106.0f, ground.getPosition().y - 50.0f));
-	missile = std::make_shared<sf::VertexArray>(sf::LineStrip, 2);
-
+	c1.rect.setPosition(screenWidth / 2, ground.getPosition().y - 30.0f);
+	e1.rect.setSize(sf::Vector2f(15.0f, 15.0f));
+	e1.rect.setPosition(5.0f, 5.0f);
+	e1.rect.setFillColor(sf::Color::Blue);
+	entities.push_back(e1);
 }
 
 Engine::~Engine()
 {
 	std::cout << "Engine object deleted!" << std::endl;
-}
-
-void Engine::FireMissile(sf::Time deltaTime)
-{
-
-	(*missile)[0].position = sf::Vector2f(b1.rect.getPosition().x, b1.rect.getPosition().y);
-	(*missile)[0].color = sf::Color::Blue;
-	(*missile)[1].color = sf::Color::Blue;
-	//(*missile)[0].position = sf::Vector2f(0.0f, 0.0f);
-	//(*missile)[1].position = sf::Vector2f(0.0f, 0.0f);
-	
-	for (int i = 0; i < sf::Mouse::getPosition(window).x; i++)
-	{
-		for (int z = 0; z < sf::Mouse::getPosition(window).y; z++)
-		{
-			(*missile)[1].position = sf::Vector2f(i, z);
-		}
-	}
 }
 
 void Engine::Update(sf::Time deltaTime)
@@ -49,9 +33,8 @@ void Engine::Update(sf::Time deltaTime)
 			break;
 
 		case sf::Event::MouseButtonPressed:
-			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			FireMissile(dTime);
-			break;
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				c1.FireMissile(window);
 		default:
 			break;
 		}
@@ -61,9 +44,13 @@ void Engine::Update(sf::Time deltaTime)
 void Engine::Render()
 {
 	window.clear(sf::Color::Black);
-	window.draw(ground);
-	window.draw(b1.rect);
-	window.draw(*missile);
+	/*window.draw(ground);
+	window.draw(c1.rect);
+	window.draw(*c1.missile); */
+	for (Entity e : entities)
+	{
+		window.draw(e);
+	}
 	window.display();
 }
 
@@ -76,7 +63,6 @@ void Engine::Run()
 		{
 			dTimeSinceStart -= dTime;
 			Update(dTime);
-			FireMissile(dTime);
 		}
 		Render();
 		dTimeSinceStart += clock.restart();
