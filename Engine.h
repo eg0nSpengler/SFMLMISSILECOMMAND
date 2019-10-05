@@ -22,16 +22,10 @@ private:
 
 private:
 	sf::RenderWindow window;
-	sf::RectangleShape ground;
 	sf::Clock clock;
 	sf::Time dTime;
 	sf::Time dTimeSinceStart;
-	std::vector<Entity> entities;
-	City c1;
-	Entity e1;
-	Entity e2;
-
-
-
+	std::shared_ptr<City> c1;
+	std::vector<City> cities;
 };
 

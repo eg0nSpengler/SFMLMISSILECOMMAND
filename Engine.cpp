@@ -5,15 +5,8 @@ Engine::Engine(int screenWidth, int screenHeight) : window(sf::VideoMode(screenW
 	std::cout << "Engine object constructed" << std::endl;
 	dTime = sf::seconds(1.0f / 60.0f);
 	dTimeSinceStart = sf::Time::Zero;
-	ground.setSize(sf::Vector2f(screenWidth, -50.0f));
-	ground.setPosition(sf::Vector2f(0.0f, screenHeight));
-	ground.setFillColor(sf::Color::Yellow);
-	ground.setOutlineColor(sf::Color::Black);
-	c1.rect.setPosition(screenWidth / 2, ground.getPosition().y - 30.0f);
-	e1.rect.setSize(sf::Vector2f(15.0f, 15.0f));
-	e1.rect.setPosition(5.0f, 5.0f);
-	e1.rect.setFillColor(sf::Color::Blue);
-	entities.push_back(e1);
+	c1 = std::make_shared<City>(sf::Vector2f(screenWidth / 2, screenHeight - 50.0f));
+	cities.push_back(*c1);
 }
 
 Engine::~Engine()
@@ -34,7 +27,8 @@ void Engine::Update(sf::Time deltaTime)
 
 		case sf::Event::MouseButtonPressed:
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				c1.FireMissile(window);
+
+				
 		default:
 			break;
 		}
@@ -44,19 +38,15 @@ void Engine::Update(sf::Time deltaTime)
 void Engine::Render()
 {
 	window.clear(sf::Color::Black);
-	/*window.draw(ground);
-	window.draw(c1.rect);
-	window.draw(*c1.missile); */
-	for (Entity e : entities)
+	for (const City c : cities)
 	{
-		window.draw(e);
+		window.draw(c.rect);
 	}
 	window.display();
 }
 
 void Engine::Run()
 {
-
 	while (window.isOpen())
 	{
 		while (dTimeSinceStart > dTime)

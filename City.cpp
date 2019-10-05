@@ -1,17 +1,20 @@
 #include "City.h"
 
-City::City()
+City::City(sf::Vector2f pos, sf::Color col) : col(col)
 {
-	rect.setSize(size);
 	rect.setPosition(pos);
+	rect.setSize(size);
 	rect.setFillColor(col);
-	missile = std::make_shared<sf::VertexArray>(sf::LineStrip, 2);
 }
 
-void City::FireMissile(const sf::RenderWindow& window)
+City::City(sf::Vector2f pos)
 {
-	(*missile)[0].color = sf::Color::Blue;
-	(*missile)[1].color = sf::Color::Blue;
-	(*missile)[0].position = sf::Vector2f(rect.getPosition().x, rect.getPosition().y);
-	(*missile)[1].position = sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+	rect.setPosition(pos);
+	rect.setSize(size);
+	rect.setFillColor(col);
+}
+
+void City::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.draw(rect, sf::RenderStates::Default);
 }

@@ -3,18 +3,19 @@
 #include <memory.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include "Entity.h"
 
-class City
+class City : Entity
 {
 public:
-	City();
-	void FireMissile(const sf::RenderWindow& window);
+	City(sf::Vector2f pos);
+	City(sf::Vector2f pos, sf::Color col);	
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+public:
 	sf::RectangleShape rect;
-	std::shared_ptr<sf::VertexArray> missile;
 
 private:
-	sf::Vector2f pos = { 0, 0 };
-	sf::Vector2f size = {15.0f , 15.0f};
+	const sf::Vector2f size = {25.0f , 25.0f};
 	sf::Color col = sf::Color::Blue;
 };
 
